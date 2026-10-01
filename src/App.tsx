@@ -1,50 +1,37 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/core";
+import Sidebar, { Section } from "./components/Sidebar";
+import ClientsPage from "./pages/ClientsPage";
+import DashboardPage from "./pages/DashboardPage";
+import FacturesPage from "./pages/FacturesPage";
+import ReleveesPage from "./pages/ReleveesPage";
 import "./App.css";
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+  const [activeSection, setActiveSection] = useState<Section>("dashboard");
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
+  function renderPage() {
+    switch (activeSection) {
+      case "clients":
+        return <ClientsPage />;
+      case "releves":
+        return <ReleveesPage />;
+      case "factures":
+        return <FacturesPage />;
+      default:
+        return <DashboardPage />;
+    }
   }
 
   return (
-    <main className="container">
-      <h1>Welcome to Tauri + React</h1>
-
-      <div className="row">
-        <a href="https://vite.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="app-shell">
+      <Sidebar activeSection={activeSection} onSelect={setActiveSection} />
+      <div className="app-body">
+        <header className="topbar">
+          <h1>Gestion Eau Potable - Guelmim</h1>
+        </header>
+        <main className="main-content">{renderPage()}</main>
       </div>
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
-
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-      <p>{greetMsg}</p>
-    </main>
+    </div>
   );
 }
 

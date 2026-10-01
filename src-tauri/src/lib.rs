@@ -1,7 +1,10 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 mod commands;
 
-use commands::{ajouter_client, ajouter_releve, calculer_facture, lister_clients};
+use commands::{
+    ajouter_client, ajouter_releve, calculer_facture, changer_statut_facture, lister_clients,
+    lister_factures, lister_releves, lister_releves_client, modifier_client, supprimer_client,
+};
 use tauri_plugin_sql::{Migration, MigrationKind};
 
 #[tauri::command]
@@ -30,6 +33,12 @@ pub fn run() {
             greet,
             ajouter_client,
             lister_clients,
+            modifier_client,
+            supprimer_client,
+            lister_releves_client,
+            lister_releves,
+            lister_factures,
+            changer_statut_facture,
             ajouter_releve,
             calculer_facture
         ])
